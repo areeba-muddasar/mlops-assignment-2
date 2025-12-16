@@ -1,28 +1,39 @@
+# src/train.py
+
 import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LogisticRegression
 import pickle
 import os
 
-# Load dataset
-data = pd.read_csv("data/dataset.csv")
+def load_data(file_path="data/dataset.csv"):
+    """Load dataset"""
+    return pd.read_csv(file_path)
 
-# Example: simple model predicting 'score' from 'age'
-X = data[['age']]  # features
-y = data['score']  # target
+def prepare_features_labels(file_path="data/dataset.csv"):
+    """Prepare numeric features and target"""
+    df = load_data(file_path)
 
-# Train-test split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    # Assume last column is target
+    y = df.iloc[:, -1]
 
-# Train a small model
-model = LinearRegression()
-model.fit(X_train, y_train)
+    # Keep only numeric columns for features
+    X = df.iloc[:, :-1].select_dtypes(include=["number"])
 
-# Create models folder if it doesn't exist
-os.makedirs("models", exist_ok=True)
+    return X, y
 
-# Save the model
-with open("models/model.pkl", "wb") as f:
-    pickle.dump(model, f)
+def train_model(file_path="data/dataset.csv"):
+    """Train model and save it"""
+    X, y = prepare_features_labels(file_path)
 
-print("Model trained and saved to models/model.pkl")
+    model = LogisticRegression(max_iter=1000)
+    model.fit(X, y)
+
+    os.makedirs("models", exist_ok=True)
+    with open("models/model.pkl", "wb") as f:
+        pickle.dump(model, f)
+
+    return model
+
+if __name__ == "__main__":
+    train_model()
+    print("Training completed successfully")
