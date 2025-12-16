@@ -1,0 +1,19 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+env/
+venv/
+
+# VS Code settings
+.vscode/
+
+# Distribution / packaging
+*.egg-info/
+dist/
+build/
+
+# Others
+*.log
