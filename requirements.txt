@@ -3,3 +3,6 @@ scikit-learn
 pytest
 flake8
 numpy<2
+fastapi
+uvicorn
+pydantic
